@@ -1,53 +1,53 @@
-````markdown
 # Spring Boot Transaction Management System
 
 A high-performance backend service built with Spring Boot, PostgreSQL, and Redis. It handles user onboarding, wallet creation, atomic money transfers, and fast balance retrieval via caching.
 
 ## Key Features
 
-- **Atomicity:** `@Transactional` ensures complete rollback on failure.  
-- **Concurrency Control:** Pessimistic locking (`FOR UPDATE`) prevents race conditions.  
-- **Caching:** Redis + `@Cacheable` for hot data (wallet balances).  
-- **Cache Invalidation:** `@CacheEvict` removes stale entries after transactions.  
-- **Idempotency:** Prevents duplicate requests using a unique `Idempotency-Key`.  
-- **DTOs:** Secures API response structure.
+  * **Atomicity:** `@Transactional` ensures complete rollback on failure.
+  * **Concurrency Control:** Pessimistic locking (`FOR UPDATE`) prevents race conditions.
+  * **Caching:** Redis + `@Cacheable` for hot data (wallet balances).
+  * **Cache Invalidation:** `@CacheEvict` removes stale entries after transactions.
+  * **Idempotency:** Prevents duplicate requests using a unique `Idempotency-Key`.
+  * **DTOs:** Secures API response structure.
 
----
+-----
 
 ## 🛠 Tech Stack
 
-- Java 17+  
-- Spring Boot  
-- Spring Data JPA  
-- PostgreSQL  
-- Spring Data Redis  
-- Redis  
-- Maven  
+  * Java 17+
+  * Spring Boot
+  * Spring Data JPA
+  * PostgreSQL
+  * Spring Data Redis
+  * Redis
+  * Maven
 
----
+-----
 
 ## 🚀 How to Run
 
-### 1. Clone Repository
+### 1\. Clone Repository
+
 ```bash
 git clone https://github.com/YOUR_USERNAME/transaction-system.git
 cd transaction-system
-````
+```
 
-### 2. Set Up Databases
+### 2\. Set Up Databases
 
 Ensure:
 
-* PostgreSQL running on **5432**
-* Redis running on **6379**
+  * PostgreSQL is running on port `5432`
+  * Redis is running on port `6379`
 
-Create DB:
+Create the database:
 
 ```sql
 CREATE DATABASE transactiondb;
 ```
 
-### 3. Set Environment Variable
+### 3\. Set Environment Variable
 
 #### macOS / Linux:
 
@@ -61,27 +61,23 @@ export DB_PASSWORD='your_postgres_password'
 set DB_PASSWORD=your_postgres_password
 ```
 
-### 4. Run Application
+### 4\. Run Application
 
 ```bash
 mvn spring-boot:run
 ```
 
-Server starts at:
+The server will start at `http://localhost:8080`.
 
-```
-http://localhost:8080
-```
-
----
+-----
 
 ## 🌎 API Endpoints
 
-### **Create User**
+### Create User
 
 `POST /users`
 
-Request:
+**Request:**
 
 ```json
 {
@@ -90,7 +86,7 @@ Request:
 }
 ```
 
-Response:
+**Response (`201 Created`):**
 
 ```json
 {
@@ -101,13 +97,13 @@ Response:
 }
 ```
 
----
+-----
 
-### **Get Wallet Balance (Cached)**
+### Get Wallet Balance (Cached)
 
 `GET /wallets/{walletId}/balance`
 
-Response:
+**Response (`200 OK`):**
 
 ```json
 {
@@ -115,13 +111,13 @@ Response:
 }
 ```
 
----
+-----
 
-### **Create Transaction (Idempotent)**
+### Create Transaction (Idempotent)
 
 `POST /transactions`
 
-Request:
+**Request:**
 
 ```json
 {
@@ -132,7 +128,7 @@ Request:
 }
 ```
 
-Response:
+**Response (`201 Created`):**
 
 ```json
 {
@@ -146,14 +142,9 @@ Response:
 }
 ```
 
----
+-----
 
 ## ❌ Error Responses
 
-* **409 Conflict** → Reused `idempotencyKey`
-* **422 Unprocessable Entity** → Insufficient balance
-
----
-
-```
-```
+  * **`409 Conflict`**: Returned when a request is sent with a reused `idempotencyKey`.
+  * **`422 Unprocessable Entity`**: Returned when a `DEBIT` request is made for an amount greater than the available balance.
