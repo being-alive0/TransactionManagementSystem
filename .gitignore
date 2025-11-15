@@ -1,0 +1,24 @@
+# ==================================
+# .gitignore for Spring Boot
+# ==================================
+
+# Secrets - NEVER commit this file
+/src/main/resources/application.properties
+
+# Compiled code
+/target/
+
+# Build files
+*.jar
+*.war
+
+# IDE files (Eclipse)
+.project
+.classpath
+.settings/
+
+# Log files
+*.log
+
+# Other
+.DS_Store
